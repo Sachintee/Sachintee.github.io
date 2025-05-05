@@ -1,281 +1,544 @@
-import { useState } from 'react';
-import { 
-  Box, 
-  Container, 
-  Typography, 
-  Button, 
-  Grid, 
-  Card, 
-  CardContent, 
-  TextField,
-  InputAdornment,
-  Chip,
-  Avatar
-} from '@mui/material';
-import SearchIcon from '@mui/icons-material/Search';
-import { useNavigate } from 'react-router-dom';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IT Intern Connect - Free Internships for Students</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6B73FF;
+            --primary-dark: #000DFF;
+            --secondary: #FF6B6B;
+            --secondary-dark: #FF0000;
+            --text: #2D3748;
+            --text-light: #718096;
+            --bg: #F7FAFC;
+            --card-bg: #FFFFFF;
+            --border: #E2E8F0;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text);
+            background-color: var(--bg);
+            line-height: 1.6;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 80px 0;
+        }
+        
+        .hero {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+        }
+        
+        .hero-content {
+            flex: 1;
+        }
+        
+        .hero h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            margin-right: 15px;
+        }
+        
+        .btn-primary {
+            background-color: white;
+            color: var(--primary-dark);
+        }
+        
+        .btn-outline {
+            border: 2px solid white;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-outline:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .hero-image {
+            flex: 1;
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .hero-image img {
+            width: 100%;
+            border-radius: 8px;
+        }
+        
+        /* Search Section */
+        .search-section {
+            margin-top: -50px;
+            margin-bottom: 60px;
+        }
+        
+        .search-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+        
+        .search-card h2 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+        
+        .search-bar {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        
+        .search-bar input {
+            width: 100%;
+            padding: 16px 20px 16px 50px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        
+        .search-bar i {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+        }
+        
+        .filter-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .chip {
+            display: inline-block;
+            padding: 6px 12px;
+            background-color: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .chip:hover {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        /* Internships Section */
+        .section {
+            padding: 60px 0;
+        }
+        
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+        
+        .internships-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+        }
+        
+        .internship-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .internship-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card-header {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .company-logo {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 15px;
+        }
+        
+        .card-info h3 {
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+        
+        .card-info p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        
+        .card-body {
+            padding: 20px;
+        }
+        
+        .card-meta {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+        
+        .card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .tag {
+            display: inline-block;
+            padding: 4px 10px;
+            background-color: rgba(107, 115, 255, 0.1);
+            color: var(--primary);
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        /* How It Works */
+        .steps {
+            background-color: var(--card-bg);
+            padding: 80px 0;
+        }
+        
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            text-align: center;
+        }
+        
+        .step {
+            padding: 0 20px;
+        }
+        
+        .step-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        
+        .step h3 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+        }
+        
+        .step p {
+            color: var(--text-light);
+        }
+        
+        /* Stats */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            text-align: center;
+            padding: 60px 0;
+        }
+        
+        .stat h2 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        
+        .stat p {
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+        
+        /* CTA */
+        .cta {
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--secondary-dark) 100%);
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+        }
+        
+        .cta h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+        
+        .cta p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            opacity: 0.9;
+        }
+        
+        .btn-cta {
+            background-color: white;
+            color: var(--secondary-dark);
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero {
+                flex-direction: column;
+            }
+            
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+            
+            .steps-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header/Hero Section -->
+    <header>
+        <div class="container">
+            <div class="hero">
+                <div class="hero-content">
+                    <h1>Launch Your IT Career with Free Global Internships</h1>
+                    <p>AI-powered platform connecting students with opportunities worldwide</p>
+                    <div class="hero-buttons">
+                        <a href="/register" class="btn btn-primary">Get Started</a>
+                        <a href="/internships" class="btn btn-outline">Browse Internships</a>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <img src="https://via.placeholder.com/600x400" alt="Dashboard Preview">
+                </div>
+            </div>
+        </div>
+    </header>
 
-const Home = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const navigate = useNavigate();
+    <!-- Search Section -->
+    <div class="container">
+        <div class="search-section">
+            <div class="search-card">
+                <h2>Find Your Perfect Internship</h2>
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search by skills, companies, or locations">
+                </div>
+                <div class="filter-chips">
+                    <span class="chip">Web Development</span>
+                    <span class="chip">Artificial Intelligence</span>
+                    <span class="chip">Cybersecurity</span>
+                    <span class="chip">Data Science</span>
+                    <span class="chip">Mobile Development</span>
+                    <span class="chip">Cloud Computing</span>
+                </div>
+            </div>
+        </div>
+    </div>
 
-  // Sample featured internships data
-  const featuredInternships = [
-    {
-      id: 1,
-      title: "Frontend Developer Intern",
-      company: "TechCorp",
-      location: "Remote",
-      tags: ["react", "javascript", "web-dev"],
-      logo: "/techcorp-logo.png"
-    },
-    {
-      id: 2,
-      title: "AI Research Assistant",
-      company: "AI Labs",
-      location: "San Francisco, CA",
-      tags: ["python", "machine-learning", "ai"],
-      logo: "/ailabs-logo.png"
-    },
-    {
-      id: 3,
-      title: "DevOps Engineer Intern",
-      company: "CloudSystems",
-      location: "New York, NY",
-      tags: ["aws", "docker", "devops"],
-      logo: "/cloudsystems-logo.png"
-    }
-  ];
+    <!-- Featured Internships -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Featured Internships</h2>
+            <div class="internships-grid">
+                <!-- Internship Card 1 -->
+                <div class="internship-card">
+                    <div class="card-header">
+                        <img src="https://via.placeholder.com/50" alt="TechCorp Logo" class="company-logo">
+                        <div class="card-info">
+                            <h3>Frontend Developer Intern</h3>
+                            <p>TechCorp</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-meta">Remote • 3 months</p>
+                        <div class="card-tags">
+                            <span class="tag">#react</span>
+                            <span class="tag">#javascript</span>
+                            <span class="tag">#web-dev</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Internship Card 2 -->
+                <div class="internship-card">
+                    <div class="card-header">
+                        <img src="https://via.placeholder.com/50" alt="AI Labs Logo" class="company-logo">
+                        <div class="card-info">
+                            <h3>AI Research Assistant</h3>
+                            <p>AI Labs</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-meta">San Francisco, CA • 6 months</p>
+                        <div class="card-tags">
+                            <span class="tag">#python</span>
+                            <span class="tag">#machine-learning</span>
+                            <span class="tag">#ai</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Internship Card 3 -->
+                <div class="internship-card">
+                    <div class="card-header">
+                        <img src="https://via.placeholder.com/50" alt="CloudSystems Logo" class="company-logo">
+                        <div class="card-info">
+                            <h3>DevOps Engineer Intern</h3>
+                            <p>CloudSystems</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-meta">New York, NY • 4 months</p>
+                        <div class="card-tags">
+                            <span class="tag">#aws</span>
+                            <span class="tag">#docker</span>
+                            <span class="tag">#devops</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-  // Popular domains for filtering
-  const popularDomains = [
-    "Web Development",
-    "Artificial Intelligence",
-    "Cybersecurity",
-    "Data Science",
-    "Mobile Development",
-    "Cloud Computing"
-  ];
+    <!-- How It Works -->
+    <section class="steps">
+        <div class="container">
+            <h2 class="section-title">How It Works</h2>
+            <div class="steps-grid">
+                <div class="step">
+                    <div class="step-icon">🧠</div>
+                    <h3>Create Your AI Profile</h3>
+                    <p>Connect your GitHub and let our AI analyze your skills to build a personalized profile</p>
+                </div>
+                <div class="step">
+                    <div class="step-icon">🔍</div>
+                    <h3>Find Matching Internships</h3>
+                    <p>Our algorithm matches you with internships based on your skills and interests</p>
+                </div>
+                <div class="step">
+                    <div class="step-icon">📊</div>
+                    <h3>Apply & Track Progress</h3>
+                    <p>One-click applications and real-time tracking of your applications</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-  return (
-    <Box sx={{ bgcolor: 'background.default' }}>
-      {/* Hero Section */}
-      <Box sx={{ 
-        py: 10, 
-        background: 'linear-gradient(135deg, #6B73FF 0%, #000DFF 100%)',
-        color: 'white'
-      }}>
-        <Container maxWidth="lg">
-          <Grid container spacing={4} alignItems="center">
-            <Grid item xs={12} md={6}>
-              <Typography variant="h2" component="h1" gutterBottom>
-                Launch Your IT Career with Free Global Internships
-              </Typography>
-              <Typography variant="h5" gutterBottom sx={{ mb: 3 }}>
-                AI-powered platform connecting students with opportunities worldwide
-              </Typography>
-              <Box sx={{ display: 'flex', gap: 2 }}>
-                <Button 
-                  variant="contained" 
-                  color="secondary" 
-                  size="large"
-                  onClick={() => navigate('/register')}
-                >
-                  Get Started
-                </Button>
-                <Button 
-                  variant="outlined" 
-                  sx={{ color: 'white', borderColor: 'white' }} 
-                  size="large"
-                  onClick={() => navigate('/internships')}
-                >
-                  Browse Internships
-                </Button>
-              </Box>
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <Box sx={{ 
-                bgcolor: 'rgba(255,255,255,0.1)', 
-                p: 3, 
-                borderRadius: 2,
-                backdropFilter: 'blur(10px)'
-              }}>
-                <img 
-                  src="/dashboard-preview.png" 
-                  alt="Dashboard Preview" 
-                  style={{ width: '100%', borderRadius: 8 }}
-                />
-              </Box>
-            </Grid>
-          </Grid>
-        </Container>
-      </Box>
+    <!-- Stats -->
+    <section class="container">
+        <div class="stats">
+            <div class="stat">
+                <h2>500+</h2>
+                <p>Companies</p>
+            </div>
+            <div class="stat">
+                <h2>10,000+</h2>
+                <p>Students</p>
+            </div>
+            <div class="stat">
+                <h2>85%</h2>
+                <p>Match Rate</p>
+            </div>
+            <div class="stat">
+                <h2>30+</h2>
+                <p>Countries</p>
+            </div>
+        </div>
+    </section>
 
-      {/* Search Section */}
-      <Container maxWidth="lg" sx={{ py: 6, transform: 'translateY(-50px)' }}>
-        <Card elevation={4}>
-          <CardContent sx={{ p: 4 }}>
-            <Typography variant="h5" gutterBottom sx={{ mb: 3 }}>
-              Find Your Perfect Internship
-            </Typography>
-            <TextField
-              fullWidth
-              variant="outlined"
-              placeholder="Search by skills, companies, or locations"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <SearchIcon />
-                  </InputAdornment>
-                ),
-                sx: { height: 56 }
-              }}
-            />
-            <Box sx={{ mt: 3, display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-              {popularDomains.map((domain) => (
-                <Chip 
-                  key={domain} 
-                  label={domain} 
-                  clickable 
-                  onClick={() => setSearchTerm(domain)}
-                  variant="outlined"
-                />
-              ))}
-            </Box>
-          </CardContent>
-        </Card>
-      </Container>
+    <!-- CTA -->
+    <section class="cta">
+        <div class="container">
+            <h2>Ready to Start Your IT Journey?</h2>
+            <p>Join thousands of students finding their dream internships</p>
+            <a href="/register" class="btn btn-primary btn-cta">Sign Up Free</a>
+        </div>
+    </section>
 
-      {/* Featured Internships */}
-      <Container maxWidth="lg" sx={{ py: 4 }}>
-        <Typography variant="h4" component="h2" gutterBottom sx={{ mb: 4 }}>
-          Featured Internships
-        </Typography>
-        <Grid container spacing={3}>
-          {featuredInternships.map((internship) => (
-            <Grid item xs={12} md={4} key={internship.id}>
-              <Card elevation={2} sx={{ height: '100%', cursor: 'pointer' }}>
-                <CardContent sx={{ p: 3 }}>
-                  <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                    <Avatar 
-                      src={internship.logo} 
-                      alt={internship.company}
-                      sx={{ width: 56, height: 56, mr: 2 }}
-                    />
-                    <Box>
-                      <Typography variant="h6">{internship.title}</Typography>
-                      <Typography color="text.secondary">{internship.company}</Typography>
-                    </Box>
-                  </Box>
-                  <Typography variant="body2" sx={{ mb: 2 }}>
-                    {internship.location}
-                  </Typography>
-                  <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-                    {internship.tags.map((tag) => (
-                      <Chip 
-                        key={tag} 
-                        label={`#${tag}`} 
-                        size="small"
-                        color="primary"
-                        variant="outlined"
-                      />
-                    ))}
-                  </Box>
-                </CardContent>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
-      </Container>
-
-      {/* How It Works */}
-      <Box sx={{ py: 8, bgcolor: 'background.paper' }}>
-        <Container maxWidth="lg">
-          <Typography variant="h4" component="h2" gutterBottom sx={{ mb: 6, textAlign: 'center' }}>
-            How It Works
-          </Typography>
-          <Grid container spacing={4}>
-            {[
-              {
-                title: "Create Your AI Profile",
-                description: "Connect your GitHub and let our AI analyze your skills to build a personalized profile",
-                icon: "🧠"
-              },
-              {
-                title: "Find Matching Internships",
-                description: "Our algorithm matches you with internships based on your skills and interests",
-                icon: "🔍"
-              },
-              {
-                title: "Apply & Track Progress",
-                description: "One-click applications and real-time tracking of your applications",
-                icon: "📊"
-              }
-            ].map((step, index) => (
-              <Grid item xs={12} md={4} key={index}>
-                <Box sx={{ textAlign: 'center', p: 3 }}>
-                  <Typography variant="h2" sx={{ mb: 2 }}>{step.icon}</Typography>
-                  <Typography variant="h5" gutterBottom>{step.title}</Typography>
-                  <Typography variant="body1" color="text.secondary">
-                    {step.description}
-                  </Typography>
-                </Box>
-              </Grid>
-            ))}
-          </Grid>
-        </Container>
-      </Box>
-
-      {/* Stats Section */}
-      <Container maxWidth="lg" sx={{ py: 8 }}>
-        <Grid container spacing={4}>
-          {[
-            { value: "500+", label: "Companies" },
-            { value: "10,000+", label: "Students" },
-            { value: "85%", label: "Match Rate" },
-            { value: "30+", label: "Countries" }
-          ].map((stat, index) => (
-            <Grid item xs={6} md={3} key={index}>
-              <Box sx={{ textAlign: 'center' }}>
-                <Typography variant="h2" color="primary" gutterBottom>
-                  {stat.value}
-                </Typography>
-                <Typography variant="h6">{stat.label}</Typography>
-              </Box>
-            </Grid>
-          ))}
-        </Grid>
-      </Container>
-
-      {/* Call to Action */}
-      <Box sx={{ 
-        py: 10, 
-        background: 'linear-gradient(135deg, #FF6B6B 0%, #FF0000 100%)',
-        color: 'white',
-        textAlign: 'center'
-      }}>
-        <Container maxWidth="md">
-          <Typography variant="h3" component="h2" gutterBottom>
-            Ready to Start Your IT Journey?
-          </Typography>
-          <Typography variant="h5" sx={{ mb: 4 }}>
-            Join thousands of students finding their dream internships
-          </Typography>
-          <Button 
-            variant="contained" 
-            color="secondary" 
-            size="large"
-            onClick={() => navigate('/register')}
-            sx={{ px: 6, py: 2 }}
-          >
-            Sign Up Free
-          </Button>
-        </Container>
-      </Box>
-    </Box>
-  );
-};
-
-export default Home;
+    <script>
+        // Simple interactivity
+        document.querySelectorAll('.chip').forEach(chip => {
+            chip.addEventListener('click', function() {
+                document.querySelector('.search-bar input').value = this.textContent;
+            });
+        });
+        
+        // Animation for cards
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = 1;
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        document.querySelectorAll('.internship-card, .step').forEach(el => {
+            el.style.opacity = 0;
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'all 0.6s ease';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
