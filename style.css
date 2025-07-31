@@ -1,4 +1,4 @@
-    <style>
+
         :root {
             --primary: #6B73FF;
             --primary-dark: #000DFF;
@@ -344,4 +344,3 @@
                 grid-template-columns: 1fr;
             }
         }
-    </style>
