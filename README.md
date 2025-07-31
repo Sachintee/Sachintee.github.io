@@ -1,6 +1,13 @@
 
 <html lang="en">
+
 <head>
+<nav>
+  <a href="index.html">Home</a> |
+  <a href="Aboutus.html">About</a> |
+  <a href="contact.html">Contact</a>
+</nav>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IT Intern Connect - Free Internships for Students</title>
