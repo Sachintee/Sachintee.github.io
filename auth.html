@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login | FreeInternship.me</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+:root {
+    --primary: #6B73FF;
+    --primary-dark: #000DFF;
+    --text: #2D3748;
+    --text-light: #718096;
+    --bg: #F7FAFC;
+    --card-bg: #FFFFFF;
+    --border: #E2E8F0;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.auth-container {
+    background: var(--card-bg);
+    width: 100%;
+    max-width: 420px;
+    border-radius: 14px;
+    padding: 35px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.auth-header h2 {
+    font-size: 1.8rem;
+    color: var(--text);
+}
+
+.auth-header p {
+    color: var(--text-light);
+    margin-top: 5px;
+}
+
+.auth-tabs {
+    display: flex;
+    margin-bottom: 25px;
+    border-bottom: 2px solid var(--border);
+}
+
+.auth-tabs label {
+    flex: 1;
+    text-align: center;
+    padding: 12px;
+    cursor: pointer;
+    font-weight: 500;
+    color: var(--text-light);
+}
+
+input[type="radio"] {
+    display: none;
+}
+
+#login:checked ~ .auth-tabs label[for="login"],
+#register:checked ~ .auth-tabs label[for="register"] {
+    color: var(--primary-dark);
+    border-bottom: 3px solid var(--primary);
+}
+
+.auth-form {
+    display: none;
+}
+
+#login:checked ~ .login-form,
+#register:checked ~ .register-form {
+    display: block;
+}
+
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px;
+    margin-top: 6px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    font-size: 0.95rem;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+.btn {
+    width: 100%;
+    padding: 14px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn:hover {
+    background: var(--primary-dark);
+}
+
+.extra {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 0.9rem;
+}
+
+.extra a {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 500;
+}
+</style>
+</head>
+
+<body>
+
+<div class="auth-container">
+
+    <input type="radio" name="tab" id="login" checked>
+    <input type="radio" name="tab" id="register">
+
+    <div class="auth-header">
+        <h2>FreeInternship.me</h2>
+        <p>Login or create a free account</p>
+    </div>
+
+    <div class="auth-tabs">
+        <label for="login">Login</label>
+        <label for="register">Register</label>
+    </div>
+
+    <!-- LOGIN FORM -->
+    <form class="auth-form login-form">
+        <div class="form-group">
+            <label>Email</label>
+            <input type="email" placeholder="Enter your email">
+        </div>
+
+        <div class="form-group">
+            <label>Password</label>
+            <input type="password" placeholder="Enter password">
+        </div>
+
+        <button class="btn">Login</button>
+
+        <div class="extra">
+            <a href="#">Forgot Password?</a>
+        </div>
+    </form>
+
+    <!-- REGISTER FORM -->
+    <form class="auth-form register-form">
+        <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" placeholder="Your name">
+        </div>
+
+        <div class="form-group">
+            <label>Email</label>
+            <input type="email" placeholder="Email address">
+        </div>
+
+        <div class="form-group">
+            <label>Password</label>
+            <input type="password" placeholder="Create password">
+        </div>
+
+        <button class="btn">Create Account</button>
+    </form>
+
+</div>
+
+</body>
+</html>
