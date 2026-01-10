@@ -203,6 +203,45 @@ input[type="radio"] {
     </form>
 
 </div>
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+
+<script>
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "freeinternship-me.firebaseapp.com",
+  projectId: "freeinternship-me",
+  storageBucket: "freeinternship-me.appspot.com",
+  messagingSenderId: "XXXX",
+  appId: "XXXX"
+};
+
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+
+/* LOGIN */
+document.querySelector(".login-form").addEventListener("submit", e => {
+  e.preventDefault();
+  const email = e.target[0].value;
+  const password = e.target[1].value;
+
+  auth.signInWithEmailAndPassword(email, password)
+    .then(() => window.location.href = "dashboard.html")
+    .catch(err => alert(err.message));
+});
+
+/* REGISTER */
+document.querySelector(".register-form").addEventListener("submit", e => {
+  e.preventDefault();
+  const email = e.target[1].value;
+  const password = e.target[2].value;
+
+  auth.createUserWithEmailAndPassword(email, password)
+    .then(() => window.location.href = "dashboard.html")
+    .catch(err => alert(err.message));
+});
+</script>
 
 </body>
 </html>
